@@ -1,6 +1,7 @@
 // Archivo: lib/screens/my_medications_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class MyMedicationsScreen extends StatelessWidget {
@@ -13,8 +14,7 @@ class MyMedicationsScreen extends StatelessWidget {
         title: const Text('Mis Medicamentos'),
         leading: IconButton(
           icon: const Icon(LucideIcons.arrowLeft),
-          onPressed: () =>
-              Navigator.of(context).pop(), // O usa GoRouter si prefieres
+          onPressed: () => Navigator.of(context).pop(), // O usa GoRouter si prefieres
         ),
       ),
       body: Padding(
@@ -23,9 +23,7 @@ class MyMedicationsScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(LucideIcons.pill, size: 80, color: Theme
-                  .of(context)
-                  .primaryColor),
+              Icon(LucideIcons.pill, size: 80, color: Theme.of(context).primaryColor),
               const SizedBox(height: 20),
               const Text(
                 'Aquí se mostrará la lista de tus medicamentos.',
@@ -39,8 +37,7 @@ class MyMedicationsScreen extends StatelessWidget {
                 onPressed: () {
                   // TODO: Implementar la lógica para agregar un nuevo medicamento
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                        'Funcionalidad "Agregar Medicamento" pendiente.')),
+                    const SnackBar(content: Text('Funcionalidad "Agregar Medicamento" pendiente.')),
                   );
                 },
               ),
