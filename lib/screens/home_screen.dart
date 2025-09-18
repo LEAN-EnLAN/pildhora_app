@@ -5,6 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:pastillero_inteligente/providers/auth_provider.dart';
+<<<<<<< Updated upstream
+=======
+import 'package:pastillero_inteligente/widgets/custom_card.dart';
+import 'package:pastillero_inteligente/widgets/medication_list.dart';
+>>>>>>> Stashed changes
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -24,6 +29,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+<<<<<<< Updated upstream
         title: Text(isPatientView ? 'Mi Pildhora' : 'Panel de Cuidador'),
         actions: [
           IconButton(
@@ -40,16 +46,101 @@ class HomeScreen extends ConsumerWidget {
               ? _buildPatientView(context)
               : _buildCaregiverView(context),
         ),
+=======
+        title: const Text('Píldhora App'),
+        actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.settings),
+            onPressed: () => context.go('/settings'),
+          ),
+          IconButton(
+            icon: const Icon(LucideIcons.logOut),
+            onPressed: () {
+              ref.read(authProvider.notifier).signOut();
+            },
+          ),
+        ],
+      ),
+      body: userProfile == null
+          ? const Center(child: CircularProgressIndicator())
+          : userProfile.role == 'paciente'
+              ? _buildPatientView(context)
+              : _buildCaregiverView(context, ref),
+    );
+  }
+
+  Widget _buildPatientView(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text(
+            'Hola, [Nombre del Paciente]',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          CustomCard(
+            title: 'Mi Pastillero',
+            icon: LucideIcons.box,
+            onTap: () {
+              // Navegar a la pantalla del pastillero
+            },
+          ),
+          const SizedBox(height: 16),
+          CustomCard(
+            title: 'Mis Cuidadores',
+            icon: LucideIcons.users,
+            onTap: () {
+              // Navegar a la pantalla de cuidadores
+            },
+          ),
+          const SizedBox(height: 16),
+          const MedicationList(),
+        ],
+>>>>>>> Stashed changes
       ),
     );
   }
 
+<<<<<<< Updated upstream
   // Vista para el Paciente
   List<Widget> _buildPatientView(BuildContext context) {
     return [
       const Text(
         'Mis Medicamentos',
         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+=======
+  Widget _buildCaregiverView(BuildContext context, WidgetRef ref) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Text(
+            'Panel de Cuidador',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          CustomCard(
+            title: 'Gestionar Paciente',
+            icon: LucideIcons.user,
+            onTap: () => context.go('/caregiver_panel_screen'),
+          ),
+          const SizedBox(height: 16),
+          CustomCard(
+            title: 'Historial de Tomas',
+            icon: LucideIcons.history,
+            onTap: () => context.go('/history'),
+          ),
+          const SizedBox(height: 16),
+          CustomCard(
+            title: 'Vincular Dispositivo',
+            icon: LucideIcons.wifi, // Icono de Wifi
+            onTap: () => context.go('/pairing'),
+          ),
+        ],
+>>>>>>> Stashed changes
       ),
       const SizedBox(height: 16),
       // Placeholder para la lista de medicamentos
