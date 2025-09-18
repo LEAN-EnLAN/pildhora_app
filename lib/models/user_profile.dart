@@ -1,26 +1,23 @@
 // Archivo: lib/models/user_profile.dart
 
-enum ProfileType {
-  paciente,
-  cuidador,
-}
-
-enum CaregiverRole {
-  principal,
-  normal,
-}
-
 class UserProfile {
-  final String email;
-  final ProfileType type;
-  final CaregiverRole? role;
+  final String uid;
+  final String? email;
+  final String role; // 'paciente' o 'cuidador'
+  final bool isPrincipalCuidador;
+
+  // Mock data for UI prototyping
+  final String mockPatientName;
+  final int mockPatientAge;
+  final List<String> managedCaregiversNames;
 
   UserProfile({
-    required this.email,
-    required this.type,
-    this.role,
+    required this.uid,
+    this.email,
+    this.role = 'paciente',
+    this.isPrincipalCuidador = false,
+    this.mockPatientName = 'Paciente Asignado',
+    this.mockPatientAge = 0,
+    this.managedCaregiversNames = const [],
   });
-
-  bool get isPrincipalCuidador => type == ProfileType.cuidador && role == CaregiverRole.principal;
-  bool get isPaciente => type == ProfileType.paciente;
 }
