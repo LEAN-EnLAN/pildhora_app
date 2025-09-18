@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pastillero_inteligente/screens/add_caregiver_screen.dart';
 
 // Importamos todas las pantallas
 import 'package:pastillero_inteligente/screens/home_screen.dart';
@@ -83,6 +84,10 @@ class PildhoraApp extends ConsumerWidget {
         GoRoute(
           path: '/caregiver_panel',
           builder: (c, s) => const CaregiverPanelScreen(),
+        ),
+        GoRoute(
+          path: '/caregiver_panel/add_caregiver_screen', // <--- FÍJATE AQUÍ
+          builder: (context, state) => const AddCaregiverScreen(),
         ),
       ],
     );
