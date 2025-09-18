@@ -1,26 +1,5 @@
 // Archivo: lib/models/user_profile.dart
 
-<<<<<<< Updated upstream
-class UserProfile {
-  final String uid;
-  final String? email;
-  final String role; // 'paciente' o 'cuidador'
-  final bool isPrincipalCuidador;
-
-  // Mock data for UI prototyping
-  final String mockPatientName;
-  final int mockPatientAge;
-  final List<String> managedCaregiversNames;
-
-  UserProfile({
-    required this.uid,
-    this.email,
-    this.role = 'paciente',
-    this.isPrincipalCuidador = false,
-    this.mockPatientName = 'Paciente Asignado',
-    this.mockPatientAge = 0,
-    this.managedCaregiversNames = const [],
-=======
 import 'package:flutter/foundation.dart';
 
 // Enum para el tipo de perfil de usuario
@@ -35,8 +14,7 @@ enum CaregiverRole {
   secundario,
 }
 
-// NUEVA CLASE para almacenar la información de contacto de un cuidador.
-// Esto mantiene el modelo UserProfile más limpio.
+// Clase para almacenar la información de contacto de un cuidador.
 @immutable
 class CaregiverInfo {
   final String name;
@@ -47,41 +25,68 @@ class CaregiverInfo {
     required this.name,
     required this.phone,
     required this.email,
->>>>>>> Stashed changes
+  });
+}
+
+// NUEVA CLASE: Para representar la información básica de un paciente gestionado.
+@immutable
+class PatientInfo {
+  final String uid;
+  final String name;
+  final int age;
+
+  const PatientInfo({
+    required this.uid,
+    required this.name,
+    required this.age,
   });
 }
 
 
 @immutable
 class UserProfile {
+  final String uid;
+  final String name; // <--- AÑADIDO
+  final int? age;    // <--- AÑADIDO
   final String email;
   final ProfileType type;
   final CaregiverRole? role; // Solo para cuidadores
-
-  // NUEVO CAMPO: Información del cuidador asignado al paciente.
-  // Es opcional, ya que un paciente puede no tener un cuidador todavía.
-  final CaregiverInfo? caregiverInfo;
+  final CaregiverInfo? caregiverInfo; // Info del cuidador asignado al paciente
+  final List<PatientInfo>? managedPatients; // <--- AÑADIDO: Lista de pacientes para un cuidador
 
   const UserProfile({
+    required this.uid,
+    required this.name, // <--- AÑADIDO
+    this.age,           // <--- AÑADIDO
     required this.email,
     required this.type,
     this.role,
-    this.caregiverInfo, // Añadido al constructor
+    this.caregiverInfo,
+    this.managedPatients, // <--- AÑADIDO
   });
 
-  // Metodo copyWith para crear una copia del objeto con valores actualizados.
-  // Es una buena práctica para objetos inmutables, especialmente con Riverpod.
+  // NUEVO GETTER: Reemplaza la lógica de 'isPrincipalCuidador'
+  bool get isPrincipalCuidador => role == CaregiverRole.principal;
+
   UserProfile copyWith({
+    String? uid,
+    String? name,
+    int? age,
     String? email,
     ProfileType? type,
     ValueGetter<CaregiverRole?>? role,
     ValueGetter<CaregiverInfo?>? caregiverInfo,
+    List<PatientInfo>? managedPatients,
   }) {
     return UserProfile(
+      uid: uid ?? this.uid,
+      name: name ?? this.name,
+      age: age ?? this.age,
       email: email ?? this.email,
       type: type ?? this.type,
       role: role != null ? role() : this.role,
       caregiverInfo: caregiverInfo != null ? caregiverInfo() : this.caregiverInfo,
+      managedPatients: managedPatients ?? this.managedPatients,
     );
   }
 }

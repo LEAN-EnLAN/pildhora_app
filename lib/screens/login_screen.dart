@@ -23,18 +23,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final Map<String, dynamic> _mockUsers = {
     "paciente@test.com": {
       "password": "123",
-      "profile": UserProfile(email: "paciente@test.com", type: ProfileType.paciente),
+      "profile": UserProfile(
+        uid: "paciente-123", // UID de ejemplo
+        email: "paciente@test.com",
+        type: ProfileType.paciente,
+        // Añade la información del cuidador al perfil del paciente
+        caregiverInfo: const CaregiverInfo(
+          name: "Carlos Cuidador",
+          phone: "+1 234 567 890",
+          email: "cuidador@test.com",
+        ),
+      ),
     },
     "cuidador@test.com": {
       "password": "123",
       "profile": UserProfile(
+        uid: "cuidador-456", // UID de ejemplo
         email: "cuidador@test.com",
         type: ProfileType.cuidador,
         role: CaregiverRole.principal,
       ),
     },
-  };
-
+    };
   void _authenticate() {
     final email = _emailController.text.trim();
     final pass = _passwordController.text.trim();

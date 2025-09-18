@@ -1,15 +1,11 @@
 // Archivo: lib/screens/home_screen.dart
 
-import 'package.flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:pastillero_inteligente/providers/auth_provider.dart';
-<<<<<<< Updated upstream
-=======
-import 'package:pastillero_inteligente/widgets/custom_card.dart';
-import 'package:pastillero_inteligente/widgets/medication_list.dart';
->>>>>>> Stashed changes
+import 'package:pastillero_inteligente/models/user_profile.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -18,202 +14,138 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userProfile = ref.watch(userProfileProvider);
 
-    if (userProfile == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    // Lógica para decidir qué vista mostrar
-    bool isPatientView = userProfile.role == 'paciente';
-
     return Scaffold(
       appBar: AppBar(
-<<<<<<< Updated upstream
-        title: Text(isPatientView ? 'Mi Pildhora' : 'Panel de Cuidador'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => context.go('/settings'),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: isPatientView
-              ? _buildPatientView(context)
-              : _buildCaregiverView(context),
-        ),
-=======
-        title: const Text('Píldhora App'),
+        title: const Text('Pildhora'),
         actions: [
           IconButton(
             icon: const Icon(LucideIcons.settings),
-            onPressed: () => context.go('/settings'),
-          ),
-          IconButton(
-            icon: const Icon(LucideIcons.logOut),
             onPressed: () {
-              ref.read(authProvider.notifier).signOut();
+              // Navegar a la pantalla de configuración
+              context.push('/settings');
             },
           ),
         ],
       ),
       body: userProfile == null
           ? const Center(child: CircularProgressIndicator())
-          : userProfile.role == 'paciente'
-              ? _buildPatientView(context)
-              : _buildCaregiverView(context, ref),
+          : _buildUserView(context, userProfile),
     );
   }
 
+  Widget _buildUserView(BuildContext context, UserProfile userProfile) {
+    if (userProfile.type == ProfileType.paciente) {
+      return _buildPatientView(context);
+    } else {
+      return _buildCaregiverView(context);
+    }
+  }
+
+  // Vista para el paciente
   Widget _buildPatientView(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Hola, [Nombre del Paciente]',
+            'Hola, ¡cuida de ti!',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 20),
-          CustomCard(
-            title: 'Mi Pastillero',
-            icon: LucideIcons.box,
-            onTap: () {
-              // Navegar a la pantalla del pastillero
-            },
+          const SizedBox(height: 24),
+          _buildActionCard(
+            context: context,
+            icon: LucideIcons.pill,
+            title: 'Mis Medicamentos',
+            subtitle: 'Ver y gestionar tus tratamientos',
+            onTap: () => context.push('/my_medications'),
           ),
           const SizedBox(height: 16),
-          CustomCard(
-            title: 'Mis Cuidadores',
-            icon: LucideIcons.users,
-            onTap: () {
-              // Navegar a la pantalla de cuidadores
-            },
+          _buildActionCard(
+            context: context,
+            icon: LucideIcons.history,
+            title: 'Historial de Tomas',
+            subtitle: 'Revisa tus tomas pasadas',
+            onTap: () => context.push('/history'),
           ),
           const SizedBox(height: 16),
-          const MedicationList(),
+          _buildActionCard(
+            context: context,
+            icon: LucideIcons.phoneCall,
+            title: 'Contactar Cuidador',
+            subtitle: 'Habla con la persona a tu cargo',
+            onTap: () => context.push('/contact_caregiver'),
+          ),
         ],
->>>>>>> Stashed changes
       ),
     );
   }
 
-<<<<<<< Updated upstream
-  // Vista para el Paciente
-  List<Widget> _buildPatientView(BuildContext context) {
-    return [
-      const Text(
-        'Mis Medicamentos',
-        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-=======
-  Widget _buildCaregiverView(BuildContext context, WidgetRef ref) {
+  // Vista para el cuidador
+  Widget _buildCaregiverView(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'Panel de Cuidador',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 20),
-          CustomCard(
-            title: 'Gestionar Paciente',
-            icon: LucideIcons.user,
-            onTap: () => context.go('/caregiver_panel_screen'),
+          const SizedBox(height: 24),
+          _buildActionCard(
+            context: context,
+            icon: LucideIcons.users,
+            title: 'Gestionar Pacientes',
+            subtitle: 'Ver el estado de tus pacientes',
+            onTap: () => context.push('/caregiver_panel'),
           ),
           const SizedBox(height: 16),
-          CustomCard(
-            title: 'Historial de Tomas',
-            icon: LucideIcons.history,
-            onTap: () => context.go('/history'),
-          ),
-          const SizedBox(height: 16),
-          CustomCard(
-            title: 'Vincular Dispositivo',
-            icon: LucideIcons.wifi, // Icono de Wifi
-            onTap: () => context.go('/pairing'),
+          _buildActionCard(
+            context: context,
+            icon: LucideIcons.userPlus,
+            title: 'Añadir nuevo paciente',
+            subtitle: 'Invita a un paciente para cuidarlo',
+            onTap: () => context.push('/add_patient'), // <-- ¡Ruta de ejemplo!
           ),
         ],
->>>>>>> Stashed changes
       ),
-      const SizedBox(height: 16),
-      // Placeholder para la lista de medicamentos
-      const Card(
-        child: ListTile(
-          leading: Icon(LucideIcons.pill),
-          title: Text('Aquí irá la lista de medicamentos.'),
-        ),
-      ),
-      const SizedBox(height: 24),
-      Card(
-        child: ListTile(
-          leading: const Icon(LucideIcons.wifi),
-          title: const Text('Vincular dispositivo'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => context.go('/pair'),
-        ),
-      ),
-      Card(
-        child: ListTile(
-          leading: const Icon(LucideIcons.history),
-          title: const Text('Ver historial de tomas'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => context.go('/history'),
-        ),
-      ),
-      Card(
-        child: ListTile(
-          leading: const Icon(LucideIcons.users),
-          title: const Text('Contactar a mi cuidador'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            // Lógica para contactar
-          },
-        ),
-      ),
-    ];
+    );
   }
 
-  // Vista para el Cuidador
-  List<Widget> _buildCaregiverView(BuildContext context) {
-    return [
-      const Text(
-        'Panel de Cuidador',
-        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-      ),
-      const SizedBox(height: 16),
-      Card(
-        child: ListTile(
-          leading: const Icon(LucideIcons.userCheck),
-          title: const Text('Gestionar Cuidadores'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => context.go('/caregiver_panel'),
+  // Widget reutilizable para las tarjetas de acción
+  Widget _buildActionCard({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Icon(icon, size: 32, color: Theme.of(context).primaryColor),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    const SizedBox(height: 4),
+                    Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+                  ],
+                ),
+              ),
+              const Icon(LucideIcons.chevronRight, color: Colors.grey),
+            ],
+          ),
         ),
       ),
-      Card(
-        child: ListTile(
-          leading: const Icon(LucideIcons.pill),
-          title: const Text('Gestionar Medicamentos'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            // Lógica para gestionar medicamentos del paciente
-          },
-        ),
-      ),
-      Card(
-        child: ListTile(
-          leading: const Icon(LucideIcons.history),
-          title: const Text('Ver historial del paciente'),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => context.go('/history'),
-        ),
-      ),
-    ];
+    );
   }
 }
