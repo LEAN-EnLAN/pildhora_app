@@ -46,26 +46,25 @@ class PatientInfo {
 @immutable
 class UserProfile {
   final String uid;
-  final String name; // <--- AÑADIDO
-  final int? age;    // <--- AÑADIDO
+  final String name;
+  final int age;
   final String email;
   final ProfileType type;
   final CaregiverRole? role; // Solo para cuidadores
   final CaregiverInfo? caregiverInfo; // Info del cuidador asignado al paciente
-  final List<PatientInfo>? managedPatients; // <--- AÑADIDO: Lista de pacientes para un cuidador
+  final List<PatientInfo>? managedPatients; // Lista de pacientes para un cuidador
 
   const UserProfile({
     required this.uid,
-    required this.name, // <--- AÑADIDO
-    this.age,           // <--- AÑADIDO
+    required this.name,
+    required this.age,
     required this.email,
     required this.type,
     this.role,
     this.caregiverInfo,
-    this.managedPatients, // <--- AÑADIDO
+    this.managedPatients,
   });
 
-  // NUEVO GETTER: Reemplaza la lógica de 'isPrincipalCuidador'
   bool get isPrincipalCuidador => role == CaregiverRole.principal;
 
   UserProfile copyWith({

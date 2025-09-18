@@ -24,10 +24,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     "paciente@test.com": {
       "password": "123",
       "profile": UserProfile(
-        uid: "paciente-123", // UID de ejemplo
+        uid: "paciente-123",
+        name: "Juan Paciente",
+        age: 68,
         email: "paciente@test.com",
         type: ProfileType.paciente,
-        // Añade la información del cuidador al perfil del paciente
         caregiverInfo: const CaregiverInfo(
           name: "Carlos Cuidador",
           phone: "+1 234 567 890",
@@ -38,10 +39,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     "cuidador@test.com": {
       "password": "123",
       "profile": UserProfile(
-        uid: "cuidador-456", // UID de ejemplo
+        uid: "cuidador-456",
+        name: "Carlos Cuidador",
+        age: 45,
         email: "cuidador@test.com",
         type: ProfileType.cuidador,
         role: CaregiverRole.principal,
+        managedPatients: const [
+          PatientInfo(uid: "paciente-123", name: "Juan Paciente", age: 68),
+          PatientInfo(uid: "paciente-789", name: "Maria Paciente", age: 72),
+        ],
       ),
     },
     };

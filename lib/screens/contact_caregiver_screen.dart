@@ -1,21 +1,23 @@
-// Archivo: lib/screens/contact_caregiver_screen.dart
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:pastillero_inteligente/providers/auth_provider.dart';
 
-class ContactCaregiverScreen extends StatelessWidget {
+class ContactCaregiverScreen extends ConsumerWidget {
   const ContactCaregiverScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userProfile = ref.watch(userProfileProvider);
+    final caregiver = userProfile?.caregiverInfo;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Contactar Cuidador'),
         leading: IconButton(
           icon: const Icon(LucideIcons.arrowLeft),
-          onPressed: () =>
-              Navigator.of(context).pop(), // O usa GoRouter si prefieres
+          onPressed: () => context.pop(),
         ),
       ),
       body: Padding(
@@ -24,9 +26,7 @@ class ContactCaregiverScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(LucideIcons.phoneCall, size: 80, color: Theme
-                  .of(context)
-                  .primaryColor),
+              Icon(LucideIcons.phoneCall, size: 80, color: Theme.of(context).primaryColor),
               const SizedBox(height: 20),
               const Text(
                 'Información de contacto de tu cuidador:',
@@ -34,25 +34,23 @@ class ContactCaregiverScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              // Ejemplo de información de contacto (puedes cargarla dinámicamente)
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Nombre: [Nombre del Cuidador]',
-                          style: TextStyle(fontSize: 16)),
-                      const SizedBox(height: 8),
-                      Text('Teléfono: [Número del Cuidador]',
-                          style: TextStyle(fontSize: 16)),
-                      const SizedBox(height: 8),
-                      Text('Email: [Email del Cuidador]',
-                          style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                ),
-              ),
+              caregiver != null
+                  ? Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Nombre: ${caregiver.name}', style: const TextStyle(fontSize: 16)),
+                            const SizedBox(height: 8),
+                            Text('Teléfono: ${caregiver.phone}', style: const TextStyle(fontSize: 16)),
+                            const SizedBox(height: 8),
+                            Text('Email: ${caregiver.email}', style: const TextStyle(fontSize: 16)),
+                          ],
+                        ),
+                      ),
+                    )
+                  : const Text('No tienes un cuidador asignado.'),
               const SizedBox(height: 30),
               ElevatedButton.icon(
                 icon: const Icon(LucideIcons.messageSquare),
@@ -60,8 +58,7 @@ class ContactCaregiverScreen extends StatelessWidget {
                 onPressed: () {
                   // TODO: Implementar la lógica para enviar un mensaje
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                        'Funcionalidad "Enviar Mensaje" pendiente.')),
+                    const SnackBar(content: Text('Funcionalidad "Enviar Mensaje" pendiente.')),
                   );
                 },
               ),

@@ -55,10 +55,10 @@ class HomeScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           _buildActionCard(
             context: context,
-            icon: LucideIcons.pill,
-            title: 'Mis Medicamentos',
-            subtitle: 'Ver y gestionar tus tratamientos',
-            onTap: () => context.push('/my_medications'),
+            icon: LucideIcons.settings2,
+            title: 'Configurar Pastillero',
+            subtitle: 'Ajustes de tu dispositivo',
+            onTap: () => context.push('/device_settings'),
           ),
           const SizedBox(height: 16),
           _buildActionCard(
@@ -106,7 +106,7 @@ class HomeScreen extends ConsumerWidget {
             icon: LucideIcons.userPlus,
             title: 'Añadir nuevo paciente',
             subtitle: 'Invita a un paciente para cuidarlo',
-            onTap: () => context.push('/add_patient'), // <-- ¡Ruta de ejemplo!
+            onTap: () => context.push('/add_caregiver'), // <-- ¡Ruta de ejemplo!
           ),
         ],
       ),
