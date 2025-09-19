@@ -1,9 +1,6 @@
-// Archivo: lib/screens/login_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-
 import 'package:pastillero_inteligente/models/user_profile.dart';
 import 'package:pastillero_inteligente/providers/auth_provider.dart';
 
@@ -14,10 +11,17 @@ class LoginScreen extends ConsumerStatefulWidget {
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderStateMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isRegister = false;
+
+  late AnimationController _logoAnimationController;
+  late Animation<double> _logoFadeAnimation;
+  late Animation<double> _logoScaleAnimation;
+
+  late AnimationController _formAnimationController;
+  late Animation<Offset> _formSlideAnimation;
 
   final Map<String, dynamic> _mockUsers = {
     "paciente@test.com": {
@@ -50,7 +54,52 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ],
       ),
     },
-    };
+  };
+
+  @override
+  void initState() {
+    super.initState();
+
+    _logoAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+
+    _logoFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _logoAnimationController, curve: Curves.easeIn),
+    );
+
+    _logoScaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _logoAnimationController, curve: Curves.elasticOut),
+    );
+
+    _formAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _formSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, 1),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _formAnimationController, curve: Curves.easeInOut),
+    );
+
+    _logoAnimationController.forward();
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _formAnimationController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _logoAnimationController.dispose();
+    _formAnimationController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   void _authenticate() {
     final email = _emailController.text.trim();
     final pass = _passwordController.text.trim();
@@ -75,89 +124,113 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void _showSnack(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg)),
+      SnackBar(content: Text(msg), behavior: SnackBarBehavior.floating),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.green.shade50,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  offset: Offset(0, 4),
-                )
-              ],
-            ),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(LucideIcons.pill, size: 64, color: Color(0xFF00796B)),
-                const SizedBox(height: 16),
-                Text(
-                  _isRegister ? "Crear cuenta" : "Iniciar sesión",
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1D1D1F),
+                FadeTransition(
+                  opacity: _logoFadeAnimation,
+                  child: ScaleTransition(
+                    scale: _logoScaleAnimation,
+                    child: _buildLogo(theme),
                   ),
                 ),
                 const SizedBox(height: 24),
-                TextField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: "Email",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: "Contraseña",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: _authenticate,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00C4CC),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: Text(
-                    _isRegister ? "Registrarse" : "Iniciar sesión",
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    setState(() => _isRegister = !_isRegister);
-                  },
-                  child: Text(_isRegister
-                      ? "¿Ya tienes cuenta? Inicia sesión"
-                      : "¿No tienes cuenta? Regístrate"),
+                SlideTransition(
+                  position: _formSlideAnimation,
+                  child: _buildForm(theme),
                 ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLogo(ThemeData theme) {
+    return Column(
+      children: [
+        Icon(LucideIcons.pill, size: 80, color: theme.primaryColor),
+        const SizedBox(height: 16),
+        Text(
+          "Pildhora",
+          style: theme.textTheme.titleLarge?.copyWith(fontSize: 32, fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildForm(ThemeData theme) {
+    return Column(
+      children: [
+        Text(
+          _isRegister ? "Crear Cuenta" : "Bienvenido de Vuelta",
+          style: theme.textTheme.titleLarge?.copyWith(fontSize: 28),
+        ),
+        const SizedBox(height: 32),
+        _buildEmailField(theme),
+        const SizedBox(height: 16),
+        _buildPasswordField(theme),
+        const SizedBox(height: 32),
+        _buildLoginButton(theme),
+        const SizedBox(height: 16),
+        _buildSwitchModeButton(theme),
+      ],
+    );
+  }
+
+  Widget _buildEmailField(ThemeData theme) {
+    return TextField(
+      controller: _emailController,
+      keyboardType: TextInputType.emailAddress,
+      decoration: const InputDecoration(
+        labelText: "Email",
+        prefixIcon: Icon(LucideIcons.mail),
+      ),
+    );
+  }
+
+  Widget _buildPasswordField(ThemeData theme) {
+    return TextField(
+      controller: _passwordController,
+      obscureText: true,
+      decoration: const InputDecoration(
+        labelText: "Contraseña",
+        prefixIcon: Icon(LucideIcons.lock),
+      ),
+    );
+  }
+
+  Widget _buildLoginButton(ThemeData theme) {
+    return ElevatedButton(
+      onPressed: _authenticate,
+      child: Text(_isRegister ? "Registrarse" : "Iniciar Sesión"),
+    );
+  }
+
+  Widget _buildSwitchModeButton(ThemeData theme) {
+    return TextButton(
+      onPressed: () {
+        setState(() => _isRegister = !_isRegister);
+      },
+      child: Text(
+        _isRegister
+            ? "¿Ya tienes una cuenta? Inicia sesión"
+            : "¿No tienes una cuenta? Regístrate",
+        style: TextStyle(color: theme.primaryColor),
       ),
     );
   }
