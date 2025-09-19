@@ -15,11 +15,19 @@ import 'package:pastillero_inteligente/screens/contact_caregiver_screen.dart';
 import 'package:pastillero_inteligente/screens/patient_details_screen.dart';
 import 'package:pastillero_inteligente/screens/device_settings_screen.dart';
 import 'package:pastillero_inteligente/screens/patient_medications_screen.dart';
+import 'package:pastillero_inteligente/screens/add_medication_screen.dart';
+import 'package:pastillero_inteligente/screens/edit_medication_screen.dart';
 
 // Importamos nuestros providers
 import 'package:pastillero_inteligente/providers/auth_provider.dart';
+import 'package:pastillero_inteligente/providers/medication_provider.dart';
 
-void main() {
+import 'package:pastillero_inteligente/services/notification_service.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().init();
+  await NotificationService().requestPermissions();
   runApp(const ProviderScope(child: PildhoraApp()));
 }
 
@@ -83,6 +91,23 @@ class PildhoraApp extends ConsumerWidget {
             final patientId = state.pathParameters['patientId']!;
             return PatientMedicationsScreen(patientId: patientId);
           },
+          routes: [
+            GoRoute(
+              path: 'add_medication',
+              builder: (context, state) {
+                final patientId = state.pathParameters['patientId']!;
+                return AddMedicationScreen(patientId: patientId);
+              },
+            ),
+            GoRoute(
+              path: 'edit/:medicationId',
+              builder: (context, state) {
+                final medicationId = state.pathParameters['medicationId']!;
+                final medication = ref.read(medicationProvider).firstWhere((m) => m.id == medicationId);
+                return EditMedicationScreen(medication: medication);
+              },
+            ),
+          ],
         ),
         GoRoute(
           path: '/contact_caregiver',
@@ -135,7 +160,7 @@ class PildhoraApp extends ConsumerWidget {
           ),
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: const Color(0xFF7D2AE8),
+          backgroundColor: Color(0xFF7D2AE8),
           foregroundColor: Colors.white,
           elevation: 0,
           titleTextStyle: TextStyle(
@@ -145,7 +170,7 @@ class PildhoraApp extends ConsumerWidget {
           ),
         ),
         cardTheme: CardThemeData(
-          elevation: null,
+          elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
             side: const BorderSide(color: Color(0xFFE5E5E5), width: 1),

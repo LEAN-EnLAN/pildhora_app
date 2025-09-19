@@ -86,16 +86,7 @@ class _PairingScreenState extends State<PairingScreen> {
 
     // Simular éxito
     // En un caso real, aquí podrías tener un error
-    bool success = true; // Cambia a false para simular error de conexión
-    if (success) {
-      setState(() => _status = PairingStatus.paired);
-    } else {
-      setState(() {
-        _status = PairingStatus.error;
-        _errorMessage = "No se pudo conectar con ${device.name}. Inténtalo de nuevo.";
-        _foundDevice = null; // Limpiar el dispositivo encontrado en caso de error para poder reintentar búsqueda
-      });
-    }
+    setState(() => _status = PairingStatus.paired);
   }
 
   void _resetPairing() {
@@ -245,11 +236,11 @@ class _PairingScreenState extends State<PairingScreen> {
                 // Navegar a la pantalla principal o de configuración del pastillero
                 Navigator.of(context).pop(); // O context.go('/');
               },
-              child: const Text('Continuar'),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 textStyle: const TextStyle(fontSize: 16),
               ),
+              child: const Text('Continuar'),
             ),
           ],
         );
@@ -308,15 +299,15 @@ class _PairingScreenState extends State<PairingScreen> {
                 content: const Text('¿Estás seguro de que deseas detener el proceso de vinculación?'),
                 actions: <Widget>[
                   TextButton(
-                    child: const Text('No'),
                     onPressed: () => Navigator.of(ctx).pop(),
+                    child: const Text('No'),
                   ),
                   TextButton(
-                    child: const Text('Sí, Cancelar'),
                     onPressed: () {
                       Navigator.of(context).pop();
                       _resetPairing(); // Resetea al estado inicial
                     },
+                    child: const Text('Sí, Cancelar'),
                   ),
                 ],
               ),
