@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:pastillero_inteligente/models/user_profile.dart';
@@ -23,18 +22,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final Map<String, dynamic> _mockUsers = {
     "paciente@test.com": {
       "password": "123",
-      "profile": UserProfile(email: "paciente@test.com", type: ProfileType.paciente),
+      "profile": UserProfile(
+        uid: "paciente-123",
+        name: "Juan Paciente",
+        age: 68,
+        email: "paciente@test.com",
+        type: ProfileType.paciente,
+        caregiverInfo: const CaregiverInfo(
+          name: "Carlos Cuidador",
+          phone: "+1 234 567 890",
+          email: "cuidador@test.com",
+        ),
+      ),
     },
     "cuidador@test.com": {
       "password": "123",
       "profile": UserProfile(
+        uid: "cuidador-456",
+        name: "Carlos Cuidador",
+        age: 45,
         email: "cuidador@test.com",
         type: ProfileType.cuidador,
         role: CaregiverRole.principal,
+        managedPatients: const [
+          PatientInfo(uid: "paciente-123", name: "Juan Paciente", age: 68),
+          PatientInfo(uid: "paciente-789", name: "Maria Paciente", age: 72),
+        ],
       ),
     },
-  };
-
+    };
   void _authenticate() {
     final email = _emailController.text.trim();
     final pass = _passwordController.text.trim();

@@ -1,69 +1,70 @@
-// Ejemplo de Pantalla para Agregar Cuidador (necesitarías crear este archivo)
-// Archivo: lib/screens/add_caregiver_screen.dart
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
-class AddCaregiverScreen extends ConsumerWidget {
+class AddCaregiverScreen extends StatefulWidget {
   const AddCaregiverScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final TextEditingController emailController = TextEditingController();
+  State<AddCaregiverScreen> createState() => _AddCaregiverScreenState();
+}
 
+class _AddCaregiverScreenState extends State<AddCaregiverScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agregar Nuevo Cuidador'),
+        title: const Text('Añadir Cuidador'),
+        leading: IconButton(
+          icon: const Icon(LucideIcons.arrowLeft),
+          onPressed: () => context.pop(),
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email del Cuidador',
-                hintText: 'ejemplo@correo.com',
-                border: OutlineInputBorder(),
+        padding: const EdgeInsets.all(20.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email del cuidador',
+                  prefixIcon: Icon(LucideIcons.mail),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, introduce un email';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Por favor, introduce un email válido';
+                  }
+                  return null;
+                },
               ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                final email = emailController.text;
-                if (email.isNotEmpty) {
-                  // Aquí llamarías a tu servicio/provider para agregar el cuidador
-                  // Ejemplo: ref.read(caregiverManagementProvider).addCaregiver(email);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Invitación enviada a $email (Simulado)')),
-                  );
-                  // Podrías navegar hacia atrás o a la lista de cuidadores
-                  // context.pop();
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Por favor, ingresa un email.')),
-                  );
-                }
-              },
-              child: const Text('Agregar Cuidador'),
-            ),
-          ],
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                icon: const Icon(LucideIcons.send),
+                label: const Text('Enviar Invitación'),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    // Lógica para enviar la invitación
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Invitación enviada a ${_emailController.text}'),
+                      ),
+                    );
+                    context.pop();
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
-// En tu GoRouter (main.dart), dentro de las rutas de '/caregiver_panel' o como ruta de primer nivel:
-/*
-GoRoute(
-  path: '/caregiver_panel/add_caregiver',
-  builder: (context, state) => const AddCaregiverScreen(),
-),
-// O si es de primer nivel:
-// GoRoute(
-//   path: '/add_caregiver', // O la ruta que prefieras
-//   builder: (context, state) => const AddCaregiverScreen(),
-// ),
-*/

@@ -12,7 +12,6 @@ class MockDeviceServer {
 
   Future<void> start({int port = 8080}) async {
     _server = await HttpServer.bind(InternetAddress.loopbackIPv4, port);
-    print('MockDeviceServer escuchando en http://localhost:$port');
 
     await for (HttpRequest request in _server!) {
       final path = request.uri.path;

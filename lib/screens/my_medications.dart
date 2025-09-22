@@ -1,20 +1,20 @@
-// Archivo: lib/screens/my_medications_screen.dart
-
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-class MyMedicationsScreen extends StatelessWidget {
-  const MyMedicationsScreen({super.key});
+class PatientMedicationsScreen extends StatelessWidget {
+  final String patientId;
+
+  const PatientMedicationsScreen({super.key, required this.patientId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mis Medicamentos'),
+        title: const Text('Medicamentos del Paciente'),
         leading: IconButton(
           icon: const Icon(LucideIcons.arrowLeft),
-          onPressed: () =>
-              Navigator.of(context).pop(), // O usa GoRouter si prefieres
+          onPressed: () => context.pop(),
         ),
       ),
       body: Padding(
@@ -23,14 +23,12 @@ class MyMedicationsScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(LucideIcons.pill, size: 80, color: Theme
-                  .of(context)
-                  .primaryColor),
+              Icon(LucideIcons.pill, size: 80, color: Theme.of(context).primaryColor),
               const SizedBox(height: 20),
-              const Text(
-                'Aquí se mostrará la lista de tus medicamentos.',
+              Text(
+                'Aquí se mostrará la lista de medicamentos del paciente con id: $patientId',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
@@ -39,8 +37,7 @@ class MyMedicationsScreen extends StatelessWidget {
                 onPressed: () {
                   // TODO: Implementar la lógica para agregar un nuevo medicamento
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                        'Funcionalidad "Agregar Medicamento" pendiente.')),
+                    const SnackBar(content: Text('Funcionalidad "Agregar Medicamento" pendiente.')),
                   );
                 },
               ),
