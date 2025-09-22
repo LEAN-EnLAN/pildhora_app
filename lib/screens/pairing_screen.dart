@@ -1,6 +1,7 @@
 // Archivo: lib/screens/pairing_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'dart:async'; // Para Future.delayed y Timer
 
@@ -242,8 +243,13 @@ class _PairingScreenState extends State<PairingScreen> {
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {
-                // Navegar a la pantalla principal o de configuración del pastillero
-                Navigator.of(context).pop(); // O context.go('/');
+              onTap: () {
+                if (GoRouter.of(context).canPop()) {
+                  GoRouter.of(context).pop();
+                } else {
+                  GoRouter.of(context).go('/home');
+                }
+              };
               },
               child: const Text('Continuar'),
               style: ElevatedButton.styleFrom(
