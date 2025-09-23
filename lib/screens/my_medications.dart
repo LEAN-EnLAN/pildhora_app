@@ -23,7 +23,8 @@ class PatientMedicationsScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(LucideIcons.pill, size: 80, color: Theme.of(context).primaryColor),
+              Icon(LucideIcons.pill,
+                  size: 80, color: Theme.of(context).primaryColor),
               const SizedBox(height: 20),
               Text(
                 'Aquí se mostrará la lista de medicamentos del paciente con id: $patientId',
@@ -37,7 +38,9 @@ class PatientMedicationsScreen extends StatelessWidget {
                 onPressed: () {
                   // TODO: Implementar la lógica para agregar un nuevo medicamento
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Funcionalidad "Agregar Medicamento" pendiente.')),
+                    const SnackBar(
+                        content: Text(
+                            'Funcionalidad "Agregar Medicamento" pendiente.')),
                   );
                 },
               ),

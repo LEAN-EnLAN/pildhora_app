@@ -45,7 +45,8 @@ class EditMedicationScreenState extends ConsumerState<EditMedicationScreen> {
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(labelText: 'Nombre del Medicamento'),
+              decoration:
+                  const InputDecoration(labelText: 'Nombre del Medicamento'),
             ),
             TextField(
               controller: dosageController,
@@ -65,9 +66,13 @@ class EditMedicationScreenState extends ConsumerState<EditMedicationScreen> {
                   dosage: dosageController.text,
                   time: timeController.text,
                 );
-                await ref.read(medicationProvider.notifier).editMedication(updatedMedication);
-                await NotificationService().cancelNotification(updatedMedication.id);
-                await NotificationService().scheduleDailyNotification(updatedMedication);
+                await ref
+                    .read(medicationProvider.notifier)
+                    .editMedication(updatedMedication);
+                await NotificationService()
+                    .cancelNotification(updatedMedication.id);
+                await NotificationService()
+                    .scheduleDailyNotification(updatedMedication);
                 if (context.mounted) context.pop();
               },
               child: const Text('Guardar Cambios'),

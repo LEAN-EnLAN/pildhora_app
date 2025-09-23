@@ -54,7 +54,8 @@ class _AddCaregiverScreenState extends State<AddCaregiverScreen> {
                     // Lógica para enviar la invitación
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Invitación enviada a ${_emailController.text}'),
+                        content: Text(
+                            'Invitación enviada a ${_emailController.text}'),
                       ),
                     );
                     context.pop();

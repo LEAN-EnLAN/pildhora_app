@@ -42,7 +42,6 @@ class PatientInfo {
   });
 }
 
-
 @immutable
 class UserProfile {
   final String uid;
@@ -52,7 +51,8 @@ class UserProfile {
   final ProfileType type;
   final CaregiverRole? role; // Solo para cuidadores
   final CaregiverInfo? caregiverInfo; // Info del cuidador asignado al paciente
-  final List<PatientInfo>? managedPatients; // Lista de pacientes para un cuidador
+  final List<PatientInfo>?
+      managedPatients; // Lista de pacientes para un cuidador
 
   const UserProfile({
     required this.uid,
@@ -84,7 +84,8 @@ class UserProfile {
       email: email ?? this.email,
       type: type ?? this.type,
       role: role != null ? role() : this.role,
-      caregiverInfo: caregiverInfo != null ? caregiverInfo() : this.caregiverInfo,
+      caregiverInfo:
+          caregiverInfo != null ? caregiverInfo() : this.caregiverInfo,
       managedPatients: managedPatients ?? this.managedPatients,
     );
   }

@@ -27,7 +27,8 @@ class DatabaseService {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 2, onCreate: _createDB, onUpgrade: _upgradeDB);
+    return await openDatabase(path,
+        version: 2, onCreate: _createDB, onUpgrade: _upgradeDB);
   }
 
   Future _createDB(Database db, int version) async {
@@ -74,7 +75,8 @@ class DatabaseService {
   /// Inserts a new medication into the database.
   Future<void> insertMedication(Medication medication) async {
     final db = await instance.database;
-    await db.insert('medications', medication.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('medications', medication.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   /// Retrieves all medications for a given patient.
@@ -119,7 +121,8 @@ class DatabaseService {
   /// Inserts a new medication intake record into the database.
   Future<void> insertIntake(MedicationIntake intake) async {
     final db = await instance.database;
-    await db.insert('medication_intakes', intake.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('medication_intakes', intake.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   /// Retrieves all intake records for a given patient, ordered by most recent.
@@ -139,10 +142,31 @@ class DatabaseService {
     }
   }
 
+  /// Retrieves all intake records for a given list of patient IDs, ordered by most recent.
+  Future<List<MedicationIntake>> getIntakesForPatients(
+      List<String> patientIds) async {
+    final db = await instance.database;
+    if (patientIds.isEmpty) {
+      return [];
+    }
+    final placeholders = patientIds.map((_) => '?').join(',');
+    final maps = await db.query(
+      'medication_intakes',
+      where: '"patientId" IN ($placeholders)',
+      whereArgs: patientIds,
+      orderBy: 'takenTime DESC',
+    );
+
+    if (maps.isNotEmpty) {
+      return maps.map((json) => MedicationIntake.fromMap(json)).toList();
+    } else {
+      return [];
+    }
+  }
+
   /// Closes the database connection.
   Future close() async {
     final db = await instance.database;
     db.close();
   }
 }
-

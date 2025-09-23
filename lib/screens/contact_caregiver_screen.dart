@@ -26,7 +26,8 @@ class ContactCaregiverScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(LucideIcons.phoneCall, size: 80, color: Theme.of(context).primaryColor),
+              Icon(LucideIcons.phoneCall,
+                  size: 80, color: Theme.of(context).primaryColor),
               const SizedBox(height: 20),
               const Text(
                 'Información de contacto de tu cuidador:',
@@ -41,11 +42,14 @@ class ContactCaregiverScreen extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Nombre: ${caregiver.name}', style: const TextStyle(fontSize: 16)),
+                            Text('Nombre: ${caregiver.name}',
+                                style: const TextStyle(fontSize: 16)),
                             const SizedBox(height: 8),
-                            Text('Teléfono: ${caregiver.phone}', style: const TextStyle(fontSize: 16)),
+                            Text('Teléfono: ${caregiver.phone}',
+                                style: const TextStyle(fontSize: 16)),
                             const SizedBox(height: 8),
-                            Text('Email: ${caregiver.email}', style: const TextStyle(fontSize: 16)),
+                            Text('Email: ${caregiver.email}',
+                                style: const TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
@@ -58,7 +62,9 @@ class ContactCaregiverScreen extends ConsumerWidget {
                 onPressed: () {
                   // TODO: Implementar la lógica para enviar un mensaje
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Funcionalidad "Enviar Mensaje" pendiente.')),
+                    const SnackBar(
+                        content:
+                            Text('Funcionalidad "Enviar Mensaje" pendiente.')),
                   );
                 },
               ),

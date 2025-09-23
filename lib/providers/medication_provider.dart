@@ -9,7 +9,8 @@ class MedicationNotifier extends StateNotifier<List<Medication>> {
 
   /// Loads all medications for a specific patient from the database into the state.
   Future<void> loadMedications(String patientId) async {
-    final medications = await DatabaseService.instance.getMedications(patientId);
+    final medications =
+        await DatabaseService.instance.getMedications(patientId);
     state = medications;
   }
 
@@ -33,6 +34,7 @@ class MedicationNotifier extends StateNotifier<List<Medication>> {
 }
 
 /// The provider that exposes the [MedicationNotifier] to the UI.
-final medicationProvider = StateNotifierProvider<MedicationNotifier, List<Medication>>((ref) {
+final medicationProvider =
+    StateNotifierProvider<MedicationNotifier, List<Medication>>((ref) {
   return MedicationNotifier();
 });

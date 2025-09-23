@@ -19,7 +19,8 @@ enum PairingStatus {
 class DiscoveredDevice {
   final String id;
   final String name;
-  final int rssi; // Indicador de fuerza de señal (ej. -30 (fuerte) a -90 (débil))
+  final int
+      rssi; // Indicador de fuerza de señal (ej. -30 (fuerte) a -90 (débil))
 
   DiscoveredDevice({required this.id, required this.name, this.rssi = -50});
 
@@ -58,19 +59,25 @@ class _PairingScreenState extends State<PairingScreen> {
       if (_status == PairingStatus.searching) {
         setState(() {
           _status = PairingStatus.error;
-          _errorMessage = "No se encontraron pastilleros cercanos. Asegúrate de que esté encendido y visible.";
+          _errorMessage =
+              "No se encontraron pastilleros cercanos. Asegúrate de que esté encendido y visible.";
         });
       }
     });
 
-    await Future.delayed(const Duration(seconds: 3)); // Simular tiempo de búsqueda
+    await Future.delayed(
+        const Duration(seconds: 3)); // Simular tiempo de búsqueda
 
     // Simular hallazgo de un dispositivo
     // En una app real, aquí recibirías un callback del sistema BT/Wi-Fi
-    if (_status == PairingStatus.searching) { // Solo si aún estamos buscando
+    if (_status == PairingStatus.searching) {
+      // Solo si aún estamos buscando
       _searchTimeoutTimer?.cancel(); // Dispositivo encontrado, cancelar timeout
       setState(() {
-        _foundDevice = DiscoveredDevice(id: "Pildhora-X123-ABC", name: "Pastillero Pildhora X123", rssi: -45);
+        _foundDevice = DiscoveredDevice(
+            id: "Pildhora-X123-ABC",
+            name: "Pastillero Pildhora X123",
+            rssi: -45);
         _status = PairingStatus.deviceFound;
       });
     }
@@ -111,7 +118,8 @@ class _PairingScreenState extends State<PairingScreen> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(LucideIcons.bluetooth, size: 80, color: Color(0xFF7D2AE8)),
+            const Icon(LucideIcons.bluetooth,
+                size: 80, color: Color(0xFF7D2AE8)),
             const SizedBox(height: 24),
             const Text(
               'Vincular tu Pastillero Inteligente',
@@ -130,7 +138,8 @@ class _PairingScreenState extends State<PairingScreen> {
               icon: const Icon(LucideIcons.search),
               label: const Text('Iniciar Búsqueda'),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 textStyle: const TextStyle(fontSize: 16),
               ),
             ),
@@ -143,7 +152,8 @@ class _PairingScreenState extends State<PairingScreen> {
           children: [
             const CircularProgressIndicator(),
             const SizedBox(height: 24),
-            const Text('Buscando pastilleros cercanos...', style: TextStyle(fontSize: 18)),
+            const Text('Buscando pastilleros cercanos...',
+                style: TextStyle(fontSize: 18)),
             const SizedBox(height: 12),
             const Text(
               'Mantén tu pastillero cerca del teléfono.',
@@ -153,13 +163,15 @@ class _PairingScreenState extends State<PairingScreen> {
             const SizedBox(height: 24),
             TextButton(
               onPressed: _resetPairing,
-              child: const Text('Cancelar Búsqueda', style: TextStyle(color: Colors.redAccent)),
+              child: const Text('Cancelar Búsqueda',
+                  style: TextStyle(color: Colors.redAccent)),
             ),
           ],
         );
 
       case PairingStatus.deviceFound:
-        if (_foundDevice == null) { // Seguridad, no debería pasar
+        if (_foundDevice == null) {
+          // Seguridad, no debería pasar
           _resetPairing();
           return const Text("Error inesperado, por favor reintenta.");
         }
@@ -168,18 +180,23 @@ class _PairingScreenState extends State<PairingScreen> {
           children: [
             const Icon(LucideIcons.pill, size: 80, color: Color(0xFF7D2AE8)),
             const SizedBox(height: 24),
-            Text('Pastillero Encontrado:', style: TextStyle(fontSize: 18, color: Colors.grey[700])),
+            Text('Pastillero Encontrado:',
+                style: TextStyle(fontSize: 18, color: Colors.grey[700])),
             const SizedBox(height: 8),
-            Text(_foundDevice!.name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(_foundDevice!.name,
+                style:
+                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Text('Proximidad: ${_foundDevice!.proximity}', style: TextStyle(fontSize: 16, color: Colors.blueGrey)),
+            Text('Proximidad: ${_foundDevice!.proximity}',
+                style: TextStyle(fontSize: 16, color: Colors.blueGrey)),
             const SizedBox(height: 32),
             ElevatedButton.icon(
               icon: const Icon(LucideIcons.link),
               label: Text('Conectar con ${_foundDevice!.name}'),
               onPressed: () => _connectToDevice(_foundDevice!),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 textStyle: const TextStyle(fontSize: 16),
               ),
             ),
@@ -222,7 +239,10 @@ class _PairingScreenState extends State<PairingScreen> {
             const SizedBox(height: 24),
             Text(
               '¡Pastillero Vinculado!',
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green),
+              style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green),
             ),
             const SizedBox(height: 8),
             Text(
@@ -237,7 +257,8 @@ class _PairingScreenState extends State<PairingScreen> {
                 Navigator.of(context).pop(); // O context.go('/');
               },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 textStyle: const TextStyle(fontSize: 16),
               ),
               child: const Text('Continuar'),
@@ -249,33 +270,42 @@ class _PairingScreenState extends State<PairingScreen> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(LucideIcons.alertTriangle, size: 80, color: Colors.redAccent),
+            const Icon(LucideIcons.alertTriangle,
+                size: 80, color: Colors.redAccent),
             const SizedBox(height: 24),
             Text(
               'Error en la Vinculación',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.red[700]),
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red[700]),
             ),
             const SizedBox(height: 12),
             Text(
-              _errorMessage.isNotEmpty ? _errorMessage : 'Ocurrió un error inesperado.',
+              _errorMessage.isNotEmpty
+                  ? _errorMessage
+                  : 'Ocurrió un error inesperado.',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 32),
             ElevatedButton.icon(
-              onPressed: _resetPairing, // Permite volver a la pantalla inicial para reintentar
+              onPressed:
+                  _resetPairing, // Permite volver a la pantalla inicial para reintentar
               icon: const Icon(LucideIcons.refreshCw),
               label: const Text('Reintentar Vinculación'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orangeAccent,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 textStyle: const TextStyle(fontSize: 16),
               ),
             ),
             const SizedBox(height: 12),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancelar', style: TextStyle(color: Colors.blueGrey)),
+              child: const Text('Cancelar',
+                  style: TextStyle(color: Colors.blueGrey)),
             ),
           ],
         );
@@ -287,33 +317,36 @@ class _PairingScreenState extends State<PairingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Vincular Pastillero'),
-        leading: _status != PairingStatus.idle && _status != PairingStatus.paired && _status != PairingStatus.error
+        leading: _status != PairingStatus.idle &&
+                _status != PairingStatus.paired &&
+                _status != PairingStatus.error
             ? IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () {
-            // Preguntar si desea cancelar el proceso en curso
-            showDialog(
-              context: context,
-              builder: (BuildContext ctx) => AlertDialog(
-                title: const Text('Cancelar Vinculación'),
-                content: const Text('¿Estás seguro de que deseas detener el proceso de vinculación?'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.of(ctx).pop(),
-                    child: const Text('No'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      _resetPairing(); // Resetea al estado inicial
-                    },
-                    child: const Text('Sí, Cancelar'),
-                  ),
-                ],
-              ),
-            );
-          },
-        )
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  // Preguntar si desea cancelar el proceso en curso
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext ctx) => AlertDialog(
+                      title: const Text('Cancelar Vinculación'),
+                      content: const Text(
+                          '¿Estás seguro de que deseas detener el proceso de vinculación?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(),
+                          child: const Text('No'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            _resetPairing(); // Resetea al estado inicial
+                          },
+                          child: const Text('Sí, Cancelar'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              )
             : null, // No mostrar botón de cerrar en estados finales o inicial
       ),
       body: Center(

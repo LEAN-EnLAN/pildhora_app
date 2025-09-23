@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +32,8 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildUserView(BuildContext context, WidgetRef ref, UserProfile userProfile) {
+  Widget _buildUserView(
+      BuildContext context, WidgetRef ref, UserProfile userProfile) {
     if (userProfile.type == ProfileType.paciente) {
       return _buildPatientView(context, ref, userProfile);
     } else {
@@ -41,7 +41,8 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 
-  Widget _buildPatientView(BuildContext context, WidgetRef ref, UserProfile userProfile) {
+  Widget _buildPatientView(
+      BuildContext context, WidgetRef ref, UserProfile userProfile) {
     final children = [
       WelcomeHeader(userProfile: userProfile),
       const SizedBox(height: 24),
@@ -80,7 +81,8 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCaregiverView(BuildContext context, WidgetRef ref, UserProfile userProfile) {
+  Widget _buildCaregiverView(
+      BuildContext context, WidgetRef ref, UserProfile userProfile) {
     final children = [
       const Text(
         'Panel de Cuidador',

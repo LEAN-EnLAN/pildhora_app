@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class AnimatedListItem extends StatefulWidget {
@@ -11,7 +10,8 @@ class AnimatedListItem extends StatefulWidget {
   State<AnimatedListItem> createState() => _AnimatedListItemState();
 }
 
-class _AnimatedListItemState extends State<AnimatedListItem> with TickerProviderStateMixin {
+class _AnimatedListItemState extends State<AnimatedListItem>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -31,7 +31,8 @@ class _AnimatedListItemState extends State<AnimatedListItem> with TickerProvider
       ),
     );
 
-    _slideAnimation = Tween<Offset>(begin: const Offset(0, 0.5), end: Offset.zero).animate(
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.5), end: Offset.zero).animate(
       CurvedAnimation(
         parent: _controller,
         curve: Curves.easeOut,

@@ -33,7 +33,8 @@ class AddMedicationScreen extends ConsumerWidget {
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(labelText: 'Nombre del Medicamento'),
+              decoration:
+                  const InputDecoration(labelText: 'Nombre del Medicamento'),
             ),
             TextField(
               controller: dosageController,
@@ -53,8 +54,11 @@ class AddMedicationScreen extends ConsumerWidget {
                   dosage: dosageController.text,
                   time: timeController.text,
                 );
-                await ref.read(medicationProvider.notifier).addMedication(newMedication);
-                await NotificationService().scheduleDailyNotification(newMedication);
+                await ref
+                    .read(medicationProvider.notifier)
+                    .addMedication(newMedication);
+                await NotificationService()
+                    .scheduleDailyNotification(newMedication);
                 if (context.mounted) context.pop();
               },
               child: const Text('Guardar Medicamento'),

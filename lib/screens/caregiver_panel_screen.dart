@@ -5,12 +5,38 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:pastillero_inteligente/models/user_profile.dart';
 import 'package:pastillero_inteligente/providers/auth_provider.dart';
+import 'package:pastillero_inteligente/screens/widgets/caregiver_widgets.dart';
 
-class CaregiverPanelScreen extends ConsumerWidget {
+class CaregiverPanelScreen extends ConsumerStatefulWidget {
   const CaregiverPanelScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CaregiverPanelScreen> createState() =>
+      _CaregiverPanelScreenState();
+}
+
+class _CaregiverPanelScreenState extends ConsumerState<CaregiverPanelScreen> {
+  String _searchQuery = '';
+  final _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final userProfile = ref.watch(userProfileProvider);
 
     if (userProfile == null) {
@@ -19,7 +45,11 @@ class CaregiverPanelScreen extends ConsumerWidget {
       );
     }
 
-    final List<PatientInfo> patients = userProfile.managedPatients ?? [];
+    final List<PatientInfo> allPatients = userProfile.managedPatients ?? [];
+    final filteredPatients = allPatients
+        .where((patient) =>
+            patient.name.toLowerCase().contains(_searchQuery.toLowerCase()))
+        .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -37,39 +67,48 @@ class CaregiverPanelScreen extends ConsumerWidget {
             ),
         ],
       ),
-      body: patients.isEmpty
-          ? const Center(
-              child: Text(
-                'No tienes pacientes asignados.',
-                style: TextStyle(fontSize: 16),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: AdherenceSummaryCard(
+                patientIds: allPatients.map((p) => p.uid).toList()),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Buscar paciente...',
+                prefixIcon: const Icon(LucideIcons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Theme.of(context).scaffoldBackgroundColor,
               ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: patients.length,
-              itemBuilder: (context, index) {
-                final patient = patients[index];
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Theme.of(context).primaryColorLight,
-                      child: Text(
-                        patient.name.substring(0, 1),
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    title: Text(patient.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('Edad: ${patient.age} años'),
-                    trailing: const Icon(LucideIcons.chevronRight),
-                    onTap: () => context.push('/patient_details/${patient.uid}'),
-                  ),
-                );
-              },
             ),
+          ),
+          Expanded(
+            child: filteredPatients.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No se encontraron pacientes.',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    itemCount: filteredPatients.length,
+                    itemBuilder: (context, index) {
+                      final patient = filteredPatients[index];
+                      return PatientStatusCard(patient: patient);
+                    },
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }

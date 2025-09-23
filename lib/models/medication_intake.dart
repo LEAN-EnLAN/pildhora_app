@@ -55,7 +55,8 @@ class MedicationIntake {
       patientId: map['patientId'],
       scheduledTime: DateTime.parse(map['scheduledTime']),
       takenTime: DateTime.parse(map['takenTime']),
-      status: IntakeStatus.values.firstWhere((e) => e.toString() == map['status']),
+      status:
+          IntakeStatus.values.firstWhere((e) => e.toString() == map['status']),
     );
   }
 }

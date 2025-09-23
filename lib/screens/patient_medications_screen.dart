@@ -11,15 +11,19 @@ class PatientMedicationsScreen extends ConsumerStatefulWidget {
   const PatientMedicationsScreen({super.key, required this.patientId});
 
   @override
-  PatientMedicationsScreenState createState() => PatientMedicationsScreenState();
+  PatientMedicationsScreenState createState() =>
+      PatientMedicationsScreenState();
 }
 
-class PatientMedicationsScreenState extends ConsumerState<PatientMedicationsScreen> {
+class PatientMedicationsScreenState
+    extends ConsumerState<PatientMedicationsScreen> {
   @override
   void initState() {
     super.initState();
     // Cargar los medicamentos cuando la pantalla se inicia
-    Future.microtask(() => ref.read(medicationProvider.notifier).loadMedications(widget.patientId));
+    Future.microtask(() => ref
+        .read(medicationProvider.notifier)
+        .loadMedications(widget.patientId));
   }
 
   @override
@@ -44,7 +48,8 @@ class PatientMedicationsScreenState extends ConsumerState<PatientMedicationsScre
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(LucideIcons.pill, size: 80, color: Theme.of(context).primaryColor),
+                          Icon(LucideIcons.pill,
+                              size: 80, color: Theme.of(context).primaryColor),
                           const SizedBox(height: 20),
                           Text(
                             'No hay medicamentos para el paciente con id: ${widget.patientId}',
@@ -61,23 +66,31 @@ class PatientMedicationsScreenState extends ConsumerState<PatientMedicationsScre
                         return Card(
                           margin: const EdgeInsets.symmetric(vertical: 8.0),
                           child: ListTile(
-                            title: Text(med.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                            subtitle: Text('Dosis: ${med.dosage} - Hora: ${med.time}'),
+                            title: Text(med.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            subtitle: Text(
+                                'Dosis: ${med.dosage} - Hora: ${med.time}'),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
-                                  icon: const Icon(LucideIcons.edit, color: Colors.blue),
-                                  onPressed: () => context.push('/patient_medications/${widget.patientId}/edit/${med.id}'),
+                                  icon: const Icon(LucideIcons.edit,
+                                      color: Colors.blue),
+                                  onPressed: () => context.push(
+                                      '/patient_medications/${widget.patientId}/edit/${med.id}'),
                                 ),
                                 IconButton(
-                                  icon: const Icon(LucideIcons.trash2, color: Colors.red),
+                                  icon: const Icon(LucideIcons.trash2,
+                                      color: Colors.red),
                                   onPressed: () {
                                     showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
-                                        title: const Text('Confirmar Eliminación'),
-                                        content: Text('¿Estás seguro de que quieres eliminar ${med.name}?'),
+                                        title:
+                                            const Text('Confirmar Eliminación'),
+                                        content: Text(
+                                            '¿Estás seguro de que quieres eliminar ${med.name}?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () => context.pop(),
@@ -85,9 +98,15 @@ class PatientMedicationsScreenState extends ConsumerState<PatientMedicationsScre
                                           ),
                                           TextButton(
                                             onPressed: () async {
-                                              await NotificationService().cancelNotification(med.id);
-                                              await ref.read(medicationProvider.notifier).removeMedication(med.id, widget.patientId);
-                                              if (context.mounted) context.pop();
+                                              await NotificationService()
+                                                  .cancelNotification(med.id);
+                                              await ref
+                                                  .read(medicationProvider
+                                                      .notifier)
+                                                  .removeMedication(
+                                                      med.id, widget.patientId);
+                                              if (context.mounted)
+                                                context.pop();
                                             },
                                             child: const Text('Eliminar'),
                                           ),
@@ -108,7 +127,8 @@ class PatientMedicationsScreenState extends ConsumerState<PatientMedicationsScre
               icon: const Icon(LucideIcons.plusCircle),
               label: const Text('Agregar Medicamento'),
               onPressed: () {
-                context.push('/patient_medications/${widget.patientId}/add_medication');
+                context.push(
+                    '/patient_medications/${widget.patientId}/add_medication');
               },
             ),
           ],

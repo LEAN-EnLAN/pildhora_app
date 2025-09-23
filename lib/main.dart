@@ -103,7 +103,9 @@ class PildhoraApp extends ConsumerWidget {
               path: 'edit/:medicationId',
               builder: (context, state) {
                 final medicationId = state.pathParameters['medicationId']!;
-                final medication = ref.read(medicationProvider).firstWhere((m) => m.id == medicationId);
+                final medication = ref
+                    .read(medicationProvider)
+                    .firstWhere((m) => m.id == medicationId);
                 return EditMedicationScreen(medication: medication);
               },
             ),
@@ -132,15 +134,24 @@ class PildhoraApp extends ConsumerWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFF7D2AE8),
         primarySwatch: const MaterialColor(0xFF7D2AE8, <int, Color>{
-          50: Color(0xFFEFE8FD), 100: Color(0xFFD6C8F8), 200: Color(0xFFBCAAF3),
-          300: Color(0xFFA28CEC), 400: Color(0xFF8E77E7), 500: Color(0xFF7D2AE8),
-          600: Color(0xFF7226D1), 700: Color(0xFF6522B9), 800: Color(0xFF591F9D),
+          50: Color(0xFFEFE8FD),
+          100: Color(0xFFD6C8F8),
+          200: Color(0xFFBCAAF3),
+          300: Color(0xFFA28CEC),
+          400: Color(0xFF8E77E7),
+          500: Color(0xFF7D2AE8),
+          600: Color(0xFF7226D1),
+          700: Color(0xFF6522B9),
+          800: Color(0xFF591F9D),
           900: Color(0xFF4C1C82),
         }),
         scaffoldBackgroundColor: const Color(0xFFF9F9F9),
         fontFamily: 'Montserrat',
         textTheme: const TextTheme(
-          titleLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1D1D1F)),
+          titleLarge: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1D1D1F)),
           bodyLarge: TextStyle(fontSize: 16, color: Color(0xFF1D1D1F)),
           bodyMedium: TextStyle(fontSize: 14, color: Color(0xFF6E6E73)),
         ),

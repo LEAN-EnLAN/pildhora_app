@@ -26,10 +26,10 @@ class PaywallScreen extends StatelessWidget {
             const SizedBox(height: 20),
             const Text(
               'Con Premium obtienes:\n'
-                  '• Informes médicos avanzados\n'
-                  '• Exportación de datos\n'
-                  '• Monitoreo de múltiples cuidadores\n'
-                  '• Predicciones con IA\n',
+              '• Informes médicos avanzados\n'
+              '• Exportación de datos\n'
+              '• Monitoreo de múltiples cuidadores\n'
+              '• Predicciones con IA\n',
               style: TextStyle(fontSize: 16),
             ),
             const Spacer(),

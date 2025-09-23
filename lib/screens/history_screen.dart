@@ -51,7 +51,8 @@ class HistoryScreenState extends ConsumerState<HistoryScreen> {
                 children: [
                   Icon(LucideIcons.history, size: 80, color: Colors.grey),
                   SizedBox(height: 20),
-                  Text('No hay registros de tomas.', style: TextStyle(fontSize: 18)),
+                  Text('No hay registros de tomas.',
+                      style: TextStyle(fontSize: 18)),
                 ],
               ),
             );
@@ -64,11 +65,14 @@ class HistoryScreenState extends ConsumerState<HistoryScreen> {
             itemCount: intakes.length,
             itemBuilder: (context, index) {
               final intake = intakes[index];
-              final formattedTime = DateFormat('HH:mm, dd MMM').format(intake.takenTime);
+              final formattedTime =
+                  DateFormat('HH:mm, dd MMM').format(intake.takenTime);
               return Card(
                 child: ListTile(
-                  leading: const Icon(LucideIcons.checkCircle, color: Colors.green),
-                  title: Text(intake.medicationName, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  leading:
+                      const Icon(LucideIcons.checkCircle, color: Colors.green),
+                  title: Text(intake.medicationName,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('Tomada a las: $formattedTime'),
                 ),
               );

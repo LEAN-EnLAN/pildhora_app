@@ -11,7 +11,8 @@ class LoginScreen extends ConsumerStatefulWidget {
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderStateMixin {
+class _LoginScreenState extends ConsumerState<LoginScreen>
+    with TickerProviderStateMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isRegister = false;
@@ -70,7 +71,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
     );
 
     _logoScaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(parent: _logoAnimationController, curve: Curves.elasticOut),
+      CurvedAnimation(
+          parent: _logoAnimationController, curve: Curves.elasticOut),
     );
 
     _formAnimationController = AnimationController(
@@ -82,7 +84,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
       begin: const Offset(0, 1),
       end: Offset.zero,
     ).animate(
-      CurvedAnimation(parent: _formAnimationController, curve: Curves.easeInOut),
+      CurvedAnimation(
+          parent: _formAnimationController, curve: Curves.easeInOut),
     );
 
     _logoAnimationController.forward();
@@ -113,7 +116,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
       return;
     }
 
-    if (_mockUsers.containsKey(email) && _mockUsers[email]['password'] == pass) {
+    if (_mockUsers.containsKey(email) &&
+        _mockUsers[email]['password'] == pass) {
       final userProfile = _mockUsers[email]['profile'] as UserProfile;
       ref.read(userProfileProvider.notifier).login(userProfile);
       _showSnack("Bienvenido ${userProfile.email} 👋");
@@ -167,7 +171,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderSt
         const SizedBox(height: 16),
         Text(
           "Pildhora",
-          style: theme.textTheme.titleLarge?.copyWith(fontSize: 32, fontWeight: FontWeight.bold),
+          style: theme.textTheme.titleLarge
+              ?.copyWith(fontSize: 32, fontWeight: FontWeight.bold),
         ),
       ],
     );
